@@ -1,0 +1,628 @@
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Тишка — Учебные материалы для учителей</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --orange:#ff8b32;
+    --orange-dark:#ff6f5b;
+    --blue:#163b73;
+    --text:#2b3551;
+    --bg:#fffaf5;
+    --card:#ffffff;
+    --shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Nunito',sans-serif;
+    color:var(--text);
+    background:#fff;
+    overflow-x:hidden;
+}
+
+.container{
+    width:min(1280px,92%);
+    margin:auto;
+}
+
+/* ================= HEADER ================= */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:white;
+    box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
+
+.navbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    min-height:85px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo img{
+    width:60px;
+}
+
+.logo span{
+    font-size:34px;
+    font-weight:900;
+    color:var(--orange);
+}
+
+.menu{
+    display:flex;
+    gap:35px;
+}
+
+.menu a{
+    text-decoration:none;
+    color:var(--blue);
+    font-weight:800;
+}
+
+.menu a:hover{
+    color:var(--orange);
+}
+
+.search{
+    padding:12px 18px;
+    border-radius:30px;
+    border:none;
+    background:#f5f5f5;
+    width:250px;
+}
+
+.mobile-btn{
+    display:none;
+    font-size:30px;
+    cursor:pointer;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+    padding:70px 0;
+    background:
+    linear-gradient(180deg,#fffaf5 0%,#ffffff 100%);
+}
+
+.hero-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:center;
+}
+
+.hero h1{
+    font-size:64px;
+    line-height:1;
+    color:var(--blue);
+    margin-bottom:20px;
+}
+
+.hero h2{
+    color:var(--orange-dark);
+    margin-bottom:25px;
+    font-size:32px;
+}
+
+.hero p{
+    font-size:20px;
+    line-height:1.7;
+    margin-bottom:35px;
+}
+
+.btn{
+    display:inline-block;
+    padding:18px 34px;
+    border-radius:15px;
+    background:
+    linear-gradient(135deg,var(--orange),var(--orange-dark));
+    color:white;
+    text-decoration:none;
+    font-weight:800;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+.hero-image img{
+    width:100%;
+}
+
+/* ================= SECTION ================= */
+
+.section{
+    padding:80px 0;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.section-title h2{
+    color:var(--blue);
+    font-size:42px;
+}
+
+.section-title p{
+    color:#666;
+}
+
+/* ================= CATEGORIES ================= */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:25px;
+}
+
+.card{
+    background:white;
+    border-radius:25px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+
+.card-content{
+    padding:25px;
+}
+
+.card-content h3{
+    color:var(--blue);
+    margin-bottom:12px;
+}
+
+/* ================= PRODUCTS ================= */
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:25px;
+}
+
+.product{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    text-align:center;
+    box-shadow:var(--shadow);
+}
+
+.product img{
+    width:100%;
+    border-radius:15px;
+    margin-bottom:15px;
+}
+
+.price{
+    color:var(--orange);
+    font-size:24px;
+    font-weight:900;
+}
+
+/* ================= ADVANTAGES ================= */
+
+.advantages{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:25px;
+}
+
+.adv{
+    text-align:center;
+    padding:30px;
+    background:white;
+    border-radius:20px;
+    box-shadow:var(--shadow);
+}
+
+.adv img{
+    width:120px;
+    margin-bottom:15px;
+}
+
+/* ================= REVIEWS ================= */
+
+.reviews{
+    display:grid;
+    grid-template-columns:repe
+
+
+at(3,1fr);
+    gap:25px;
+}
+
+.review{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:var(--shadow);
+}
+
+/* ================= CTA ================= */
+
+.cta{
+    background:
+    linear-gradient(135deg,var(--orange),var(--orange-dark));
+    color:white;
+    text-align:center;
+    border-radius:30px;
+    padding:70px 30px;
+}
+
+.cta h2{
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.cta .btn{
+    background:white;
+    color:var(--orange);
+    margin-top:25px;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    margin-top:80px;
+    background:#163b73;
+    color:white;
+    padding:50px 0;
+}
+
+.footer-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:30px;
+}
+
+.footer-title{
+    margin-bottom:15px;
+    font-weight:800;
+}
+
+/* ================= MOBILE ================= */
+
+
+.hero-grid{
+    grid-template-columns:1fr;
+    text-align:center;
+}
+
+.cards,
+.products,
+.advantages,
+.reviews{
+    grid-template-columns:1fr 1fr;
+}
+
+.footer-grid{
+    grid-template-columns:1fr;
+}
+
+
+.menu,
+.search{
+    display:none;
+}
+
+.mobile-btn{
+    display:block;
+}
+
+.hero h1{
+    font-size:42px;
+}
+
+.hero h2{
+    font-size:26px;
+}
+
+.cards,
+.products,
+.advantages,
+.reviews{
+    grid-template-columns:1fr;
+}
+
+.section{
+    padding:60px 0;
+}
+
+
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="container">
+<div class="navbar">
+
+<div class="logo">
+<img src="tishka-logo.png" alt="">
+<span>Тишка</span>
+</div>
+
+<nav class="menu">
+<a href="#">Главная</a>
+<a href="#">Каталог</a>
+<a href="#">Хиты продаж</a>
+<a href="#">О нас</a>
+<a href="#">Контакты</a>
+</nav>
+
+<input class="search" placeholder="Поиск материалов">
+
+<div class="mobile-btn">☰</div>
+
+</div>
+</div>
+</header>
+
+<section class="hero">
+<div class="container">
+
+<div class="hero-grid">
+
+<div>
+<h1>Учебные материалы от кота Тишки</h1>
+
+<h2>Создано учителями для учителей</h2>
+
+<p>
+Рабочие листы, карточки, игры,
+презентации и конспекты уроков,
+которые помогут сделать занятия
+интересными и эффективными.
+</p>
+
+<a href="#" class="btn">
+Перейти в магазин
+</a>
+</div>
+
+<div class="hero-image">
+<img src="tishka-hero.png" alt="Кот Тишка">
+</div>
+
+</div>
+</div>
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Категории</h2>
+<p>Выберите нужный предмет</p>
+</div>
+
+<div class="cards">
+
+<div class="card">
+<img src="math.jpg">
+<div class="card-content">
+<h3>Математика</h3>
+<p>Игры, карточки и рабочие листы.</p>
+</div>
+</div>
+
+<div class="card">
+<img src="rus.jpg">
+<div class="card-content">
+<h3>Русский язык</h3>
+<p>Грамматика, чтение и письмо.</p>
+</div>
+</div>
+
+<div class="card">
+<img src="world.jpg">
+<div class="card-content">
+<h3>Окружающий мир</h3>
+<p>Наглядные материалы и проекты.</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Хиты продаж</h2>
+</div>
+
+<div class="products">
+
+<div class="product">
+<img src="prod1.jpg">
+<h3>Состав числа</h3>
+<div class="price">199 ₽</div>
+</div>
+
+<div class="product">
+<img src="prod2.jpg">
+<h3>Таблица умножения</h3>
+<div class="price">249 ₽</div>
+</div>
+
+<div class="product">
+<img src="prod3.jpg">
+<h3>Звуки и буквы</h3>
+<div class="price">199 ₽</div>
+</div>
+
+<div class="product">
+<img src="prod4.jpg">
+<h3>Животные мира</h3>
+<div class="price">299 ₽</div>
+</div>
+
+</div>
+
+</div>
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Почему выбирают нас</h2>
+</div>
+
+<div class="advantages">
+
+<div class="adv">
+<img src="adv1.png">
+<h3>Создано учителями</h3>
+</div>
+
+<div class="adv">
+<img src="adv2.png">
+<h3>Высокое качество</h3>
+</div>
+
+<div class="adv">
+<img src="adv3.png">
+<h3>Интересные задания</h3>
+</div>
+
+<div class="adv">
+<img src="adv4.png">
+<h3>Мгновенное скачивание</h3>
+</div>
+
+</div>
+
+</div>
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Отзывы учителей</h2>
+</div>
+
+
+<div class="reviews">
+
+<div class="review">
+★★★★★
+
+Очень качественные материалы.
+</div>
+
+<div class="review">
+★★★★★
+
+Дети работают с удовольствием.
+</div>
+
+<div class="review">
+★★★★★
+
+Экономит время подготовки к урокам.
+</div>
+
+</div>
+
+</div>
+</section>
+
+<section class="section">
+<div class="container">
+
+<div class="cta">
+<h2>Готовы сделать уроки интереснее?</h2>
+
+<p>
+Перейдите в каталог и выберите материалы
+для своего класса.
+</p>
+
+<a href="#" class="btn">Перейти в каталог</a>
+
+</div>
+
+</div>
+</section>
+
+<footer>
+<div class="container">
+
+<div class="footer-grid">
+
+<div>
+<div class="footer-title">Тишка</div>
+Учебные материалы для начальной школы
+</div>
+
+<div>
+<div class="footer-title">Разделы</div>
+Каталог
+
+Хиты продаж
+
+О нас
+</div>
+
+<div>
+<div class="footer-title">Контакты</div>
+mail@example.ru
+</div>
+
+</div>
+
+</div>
+</footer>
+
+</body>
+</html>

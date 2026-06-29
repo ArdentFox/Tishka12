@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учебные материалы Тишка</title>
+    
+    <!-- Подключаем шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- БАЗОВЫЕ СТИЛИ --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+       body {
+            font-family: 'Nunito', sans-serif;
+    /* Путь к твоей картинке */
+    background-image: url('../img/fonost.jpg'); 
+    
+    /* Картинка не повторяется (чтобы не было плиток) */
+    background-repeat: no-repeat; 
+    
+    /* Картинка растягивается на весь экран, сохраняя пропорции */
+    background-size: cover; 
+    
+    /* Картинка фиксируется при прокрутке (опционально, красиво для параллакса) */
+    background-attachment: fixed; 
+    
+    /* Выравнивание картинки по центру */
+    background-position: center; 
+    
+    color: #1c2950;
+    
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: auto;
+            padding: 0 30px;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .logo img {
+            width: 70px;
+            border-radius: 50%; /* Чтобы лого было круглым, если картинка квадратная */
+        }
+
+        .logo-text {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ff8b32;
+        }
+
+        .menu {
+            display: flex;
+            gap: 40px;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #FD7777;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .menu a:hover {
+            color: #13346e;
+        }
+
+        .search {
+            width: 280px;
+            padding: 12px 18px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            outline: none;
+        }
+
+        .icons {
+            display: flex;
+            gap: 25px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* --- HERO SECTION (С КАРУСЕЛЬЮ) --- */
+        .hero {
+            padding: 50px 0;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .hero-text h1 {
+            font-size: 72px;
+            line-height: 1;
+            color: #13346e;
+            margin-bottom: 20px;
+            text-align: center; /* Центрируем заголовок */
+        }
+
+        /* --- СТИЛИ КАРУСЕЛИ --- */
+        .carousel-container {
+            position: relative;
+            max-width: 600px; /* Ограничиваем ширину карусели */
+            margin: 0 auto;   /* Центрируем саму карусель */
+            overflow: hidden; /* Скрываем то, что вылезает за края */
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: #fff;
+        }
+
+        .carousel-track {
+            display: flex;
+            /* transition нужен для плавной анимации при клике */
+            transition: transform 0.5s ease-in-out; 
+        }
+
+        .carousel-card {
+            min-width: 100%; /* Каждая картинка занимает 100% ширины контейнера */
+            height: 350px;
+            flex-shrink: 0; /* Запрещаем сжиматься */
+            position: relative;
+        }
+
+        .carousel-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Картинка заполняет блок, не искажаясь */
+            border-radius: 15px;
+        }
+
+        /* Кнопки навигации */
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .prev-btn { left: 15px; }
+        .next-btn { right: 15px; }
+
+        .prev-btn:hover, .next-btn:hover {
+            background-color: #ff8b32;
+            color: white;
+        }
+
+        /* --- ADVANTAGES --- */
+        .advantages {
+            margin: 70px 0;
+            background-color: #ffffff;
+            padding: 40px 0;
+        }
+
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .advantage {
+            text-align: center;
+        }
+
+        .advantage-icon img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        .advantage h4 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #13346e;
+        }
+
+        .advantage p {
+            color: #666;
+        }
+
+        /* FOOTER */
+        footer {
+            background: white;
+            padding: 40px 0;
+            margin-top: 50px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+
+        /* --- АДАПТИВНОСТЬ --- */
+        @media (max-width: 1000px) {
+            .hero-content { grid-template-columns: 1fr; }
+            .advantages-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            .menu { display: none; }
+            .search { display: none; }
+            .advantages-grid { grid-template-columns: 1fr; }
+            
+            /* На мобильных убираем фиксированную высоту, чтобы скроллить */
+            .carousel-card { height: 250px; } 
+            .hero-text h1 { font-size: 48px; }
+        }
+
+ .hero-container {
+    text-align: center;
+    min-height: 10px; /* Опционально: растянуть на весь экран */
+        }
+
+         .hero-btn {
+            display: inline-block;
+            padding: 18px 40px;
+            background: #ff6f5b;
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: 800;
+            font-size: 22px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .hero-btn:hover {
+            background: #e65c4d;
+            transform: scale(1.02);
+        }
+        .hero-btn2 {
+            display: inline-block;
+            padding: 18px 40px;
+            background: #ff6f5b;
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: 800;
+            font-size: 22px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .hero-btn2:hover {
+            background: #e65c4d;
+            transform: scale(1.02);
+        }
+        
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="navbar">
+            <div class="logo">
+                <!-- Замени tishka.jpg на свою картинку лого -->
+                <img src="../img/image.jpg" alt="Тишка">
+                <div class="logo-text">Тишка</div>
+            </div>
+
+            <nav class="menu">
+               <a href="../index.html">На главную</a>
+                <a href="#">Категории</a>
+                <a href="../obs/hiti.html">Хиты продаж</a>
+                <a href="../obs/onas.html">О нас</a>
+            </nav>
+
+            <input class="search" type="text" placeholder="Поиск материалов...">
+
+            <div class="icons">
+                ❤ 🛒 👤
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+        
+        <!-- Блок с заголовком и каруселью -->
+        <div style="text-align: center;">
+            <h1>Карточка "Русский язык"</h1>
+            
+            <!-- КАРУСЕЛЬ -->
+            <div class="carousel-container">
+                <button class="prev-btn" onclick="moveCarousel(-1)">&#10094;</button>
+                
+                <div class="carousel-track" id="carouselTrack">
+                    <!-- Карточка 1 -->
+                    <div class="carousel-card">
+                        <!-- Вставь сюда путь к своей первой картинке -->
+                        <img src="../img/kart1.jpg" alt="Математика 1">
+                    </div>
+                    <!-- Карточка 2 -->
+                    <div class="carousel-card">
+                        <img src="../img/lart2.jpg" alt="Математика 2">
+                    </div>
+                    <!-- Карточка 3 -->
+                    <div class="carousel-card">
+                        <img src="../img/kart3.jpg" alt="Математика 3">
+                    </div>
+                     <!-- Карточка 4 -->
+                     <div class="carousel-card">
+                        <img src="https://via.placeholder.com/800x450/96CEB4/FFFFFF?text=Математика+4" alt="Математика 4">
+                    </div>
+                </div>
+
+                <button class="next-btn" onclick="moveCarousel(1)">&#10095;</button>
+            </div>
+            <!-- Конец карусели -->
+
+        </div>
+        <!-- Конец блока с заголовком и каруселью -->
+
+    </div>
+</section>
+<div class="hero-container">
+<a href="../obs/mahaz.html" class="hero-btn">Вернуться назад ←</a>
+<a href="https://vk.com/club239762843" class="hero-btn2">Связаться для покупки</a>
+</div>
+<section class="advantages">
+    <div class="container">
+        <div class="advantages-grid">
+            
+            <div class="advantage">
+                <div class="advantage-icon">
+                     <img src="../img/serdeshko.png" alt="Иконка учителя">
+                </div>
+                <h4>Создано учителями</h4>
+                <p>Материалы от педагогов для педагогов</p>
+            </div>
+
+            <div class="advantage">
+                <div class="advantage-icon">
+                    <img src="../img/shit.png" alt="Иконка щита">
+                </div>
+                <h4>Высокое качество</h4>
+                <p>Проверенные материалы и методики</p>
+            </div>
+
+            <div class="advantage">
+                <div class="advantage-icon">
+                    <img src="../img/zvezd.png" alt="Иконка звезды">
+                </div>
+                <h4>Интересно и эффективно</h4>
+                <p>Увлекаем учеников и развиваем навыки</p>
+            </div>
+
+            <div class="advantage">
+                <div class="advantage-icon">
+                    <img src="../img/strel.png" alt="Иконка стрелки вниз">
+                </div>
+                <h4>Мгновенное скачивание</h4>
+                <p>Получайте материалы сразу после покупки</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+<footer>
+    <div class="container">
+        © 2026 Учебные материалы Тишка. Все права защищены.
+    </div>
+</footer>
+
+<!-- Скрипт для работы карусели -->
+<script>
+    let currentPosition = 0;
+    const track = document.getElementById('carouselTrack');
+    const cards = document.querySelectorAll('.carousel-card');
+    
+    // Вычисляем ширину одного слайда (берем ширину контейнера)
+    const slideWidth = track.parentElement.clientWidth;
+
+    function moveCarousel(direction) {
+        const totalSlides = cards.length;
+        
+        // Логика переключения слайдов
+        currentPosition += direction;
+
+        if (currentPosition < 0) {
+            currentPosition = totalSlides - 1; // Если ушли влево за пределы, идем в конец
+        } else if (currentPosition >= totalSlides) {
+            currentPosition = 0; // Если ушли вправо за пределы, идем в начало (зацикливание)
+        }
+
+        // Применяем сдвиг
+        track.style.transform = `translateX(-${currentPosition * slideWidth}px)`;
+    }
+
+    // Адаптация при изменении размера окна
+    window.addEventListener('resize', () => {
+        slideWidth = track.parentElement.clientWidth;
+        moveCarousel(0); // Пересчитываем позицию
+    });
+</script>
+
+</body>
+</html>

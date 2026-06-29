@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учебные материалы Тишка</title>
+    <!-- Подключаем шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- БАЗОВЫЕ СТИЛИ И СБРОС --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+    /* Путь к твоей картинке */
+    background-image: url('../img/fonost.jpg'); 
+    
+    /* Картинка не повторяется (чтобы не было плиток) */
+    background-repeat: no-repeat; 
+    
+    /* Картинка растягивается на весь экран, сохраняя пропорции */
+    background-size: cover; 
+    
+    /* Картинка фиксируется при прокрутке (опционально, красиво для параллакса) */
+    background-attachment: fixed; 
+    
+    /* Выравнивание картинки по центру */
+    background-position: center; 
+    
+    color: #1c2950;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: auto;
+            padding: 0 30px;
+        }
+
+        /* HEADER */
+header {
+    
+    padding: 20px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky; /* Меню будет прилипать к верху */
+    top: 0;
+    z-index: 100;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo img {
+    width: 70px;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.logo-text {
+    font-size: 36px;
+    font-weight: 800;
+    color: #ff8b32;
+    letter-spacing: -1px; /* Чуть плотнее шрифт для солидности */
+}
+
+/* --- УЛУЧШЕННОЕ МЕНЮ --- */
+.menu {
+    display: flex;
+    gap: 5px; /* Уменьшили gap здесь, так как теперь делаем отступы внутри ссылок */
+    position: relative;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #FD7777;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 15px 20px; /* ГЛАВНОЕ: добавили внутренние отступы, чтобы пункты не слипались */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    display: block;
+}
+
+.menu a:hover {
+    color: #ffffff;
+    background-color: #ff6f5b;
+    transform: scale(1.02); /* Легкое увеличение при наведении */
+    box-shadow: 0 4px 12px rgba(255, 111, 91, 0.3);
+}
+
+/* Выпадающее меню */
+.has-dropdown {
+    position: relative;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%; /* Центрируем относительно родителя */
+    transform: translateX(-50%) translateY(15px); /* Сдвиг вниз и центровка */
+    min-width: 240px;
+    background: white;
+    border-radius: 16px; /* Более мягкие углы */
+    border: 1px solid rgba(0,0,0,0.05); /* Тонкая граница для объема */
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12); /* Более глубокая тень */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /* Чтобы курсор не мешал анимации */
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Плавная анимация */
+    z-index: 1000;
+    padding: 10px 0;
+    margin-top: 10px;
+}
+
+/* Добавляем margin-top: -1px, чтобы убрать разрыв между кнопкой и меню */
+.has-dropdown:hover .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: all;
+    margin-top: -1px; 
+}
+
+/* ВАЖНО: Добавляем псевдоэлемент, который заполняет этот разрыв невидимой областью.
+   Это не даст меню закрыться, если курсор пройдет через "дырку" между кнопкой и списком */
+.has-dropdown::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 20px; /* Высота невидимой зоны, куда можно вести мышку */
+    z-index: 999;
+}
+
+.dropdown-link {
+    display: block;
+    padding: 14px 24px; /* Увеличенные отступы для комфорта */
+    color: #333;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+.dropdown-link:hover {
+    background: #fff5f5;
+    color: #ff6f5b;
+    padding-left: 30px; /* Эффект сдвига текста */
+    border-left: 4px solid #ff6f5b; /* Акцентная полоска */
+}
+
+/* Поиск и иконки */
+.search {
+    width: 280px;
+    padding: 12px 25px;
+    border: 1px solid #eee;
+    border-radius: 30px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search:focus {
+    border-color: #ff6f5b;
+    box-shadow: 0 0 0 3px rgba(255, 111, 91, 0.15);
+}
+
+.icons {
+    display: flex;
+    gap: 25px;
+    font-size: 24px;
+}
+
+.hero-btn2 {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #e65c4d;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 700;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.hero-btn2:hover {
+    background: #d04a3a;
+    transform: translateY(-2px);
+}
+
+        /* --- HERO SECTION --- */
+        .hero {
+            padding: 60px 0 50px;
+        }
+
+       
+        .hero-content {
+    display: grid;
+    grid-template-columns: minmax(0, 800px) 500px minmax(0, 800px); /* Увеличили боковые колонки */
+    align-items: stretch;
+    gap: 0px;
+}
+        /* Контейнеры для картинок */
+        .hero-image, .hero-image2 {
+            width: 100%;
+            height: 80%;
+            overflow: hidden;
+            border-radius: 0px; /* Немного скруглили края для красоты */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .hero-image img, 
+        .hero-image2 img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Картинка заполняет блок, не искажаясь */
+            display: block;
+        }
+
+        /* Блок с текстом */
+        .hero-text {
+            text-align: center; 
+            /* ИЗМЕНЕНО: Центрируем контент внутри блока по вертикали и горизонтали */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 72px;
+            line-height: 1;
+            color: #13346e;
+            margin-bottom: 15px;
+        }
+
+        .hero-text h2 {
+            font-size: 48px;
+            color: #ff6f5b;
+            margin-bottom: 25px;
+        }
+
+        .hero-text p {
+            font-size: 22px;
+            color: #555;
+            margin-bottom: 35px;
+            max-width: 550px; 
+        }
+
+        .hero-btn {
+            display: inline-block;
+            padding: 18px 40px;
+            background: #ff6f5b;
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: 800;
+            font-size: 22px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .hero-btn:hover {
+            background: #e65c4d;
+            transform: scale(1.02);
+        }
+
+        /* --- CATEGORIES (CARDS) --- */
+       /* Базовые стили для контейнера */
+    .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Обертка для скролла */
+.cards-wrapper {
+    position: relative;
+    overflow-x: auto; /* Включает горизонтальную прокрутку */
+    white-space: nowrap; /* Предотвращает перенос строк */
+    padding: 20px 0;
+}
+
+/* Скрываем полосу прокрутки для красоты (работает в Chrome, Safari, Edge) */
+.cards-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+.cards-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+.cards-wrapper::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 4px;
+}
+
+/* Контейнер для карточек */
+.cards {
+    display: inline-flex; /* Выстраивает карточки в ряд */
+    gap: 20px; /* Расстояние между карточками */
+    min-width: 100%;
+}
+
+/* Карточка */
+.card {
+    background: transparent; /* ИЗМЕНЕНО: было white, стало transparent */
+    border-radius: 12px;
+    width: 280px; /* Фиксированная ширина карточки */
+    flex-shrink: 0; /* Запрещает сжиматься карточкам */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.card-content {
+    padding: 16px;
+}
+
+.card h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+}
+
+.card p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Кнопки навигации */
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    cursor: pointer;
+    padding: 12px 16px;
+    border-radius: 50%;
+    font-size: 18px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: background 0.3s;
+}
+
+.scroll-btn:hover {
+    background-color: #fff;
+}
+
+.prev { left: 10px; }
+.next { right: 10px; }
+
+/* Адаптив: на мобильных убираем кнопки, оставляем свайп */
+@media (max-width: 768px) {
+    .scroll-btn { display: none; }
+    .cards-wrapper { padding: 10px 0; }
+}
+
+/* --- ADVANTAGES --- */
+.advantages {
+    margin: 70px 0;
+    /* background-color: #ffffff; — строка удалена */
+    padding: 40px 0;
+}
+
+.advantages-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.advantage {
+    text-align: center;
+}
+
+.advantage-icon {
+    margin-bottom: 15px;
+    display: block;
+}
+
+.advantage-icon img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+}
+
+.advantage h4 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.advantage p {
+    color: #666;
+}
+
+        /* --- FOOTER --- */
+        footer {
+            background: white;
+            padding: 40px 0;
+            margin-top: 50px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #ffffff;
+        }
+
+        /* --- АДАПТИВНОСТЬ --- */
+        @media (max-width: 1000px) {
+            .hero-content {
+                /* На планшетах делаем колонки поменьше, чтобы текст не терялся */
+                grid-template-columns: minmax(0, 25vw) 1fr minmax(0, 25vw);
+            }
+            
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .advantages-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .hero-text h1 { font-size: 50px; }
+            .hero-text h2 { font-size: 36px; }
+        }
+
+        @media (max-width: 768px) {
+            .menu { display: none; }
+            .search { display: none; }
+            
+            /* НА МОБИЛЬНЫХ: УБИРАЕМ СЕТКУ, ДЕЛАЕМ ВСЁ В ОДНУ КОЛОНКУ */
+            .hero-content {
+                grid-template-columns: 1fr !important;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .hero-image, .hero-image2 {
+                width: 100%;
+                max-width: 400px; /* Ограничиваем ширину на мобильном, чтобы не было слишком крупно */
+                margin: 0 auto;
+                height: auto; /* Высота подстраивается под ширину */
+            }
+            
+            .hero-image img, .hero-image2 img {
+                height: auto;
+            }
+
+            .advantages-grid { grid-template-columns: 1fr; }
+            
+            .hero-text h1 { font-size: 40px; }
+            .hero-text h2 { font-size: 28px; }
+            
+            .cards { grid-template-columns: 1fr; }
+
+            /* На мобильном скрываем стандартное выпадающее меню, 
+               можно реализовать бургер-меню отдельно */
+            .dropdown { display: none; }
+        }
+
+        .hero-btn2 {
+    display: inline-block;
+    padding: 10px 15px;       /* уменьшили вертикальные отступы, горизонтальные чуть увеличили для аккуратности */
+    background: #ff6f5b;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 200;
+    font-size: 16px;          /* уменьшили размер шрифта */
+    transition: background 0.3s, transform 0.2s;
+}
+
+.hero-btn2:hover {
+    background: #e65c4d;
+    transform: scale(1.02);
+}
+
+/* Стили для кнопки "Наверх" */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;       /* Отступ снизу */
+    right: 30px;        /* Отступ справа */
+    width: 50px;
+    height: 50px;
+    background-color: #ff6f5b; /* Цвет фона (под цвет твоих кнопок) */
+    color: white;        /* Цвет стрелки */
+    border-radius: 50%;  /* Делает кнопку круглой */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0;          /* Скрыта по умолчанию */
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 9999;       /* Чтобы была поверх всего */
+}
+
+/* Показываем кнопку при скролле */
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background-color: #e65c4d;
+    transform: scale(1.1) translateY(-5px);
+}
+
+/* Стили для SVG-стрелки внутри кнопки */
+.back-to-top svg {
+    width: 24px;
+    height: 24px;
+}
+    </style>
+
+
+
+
+
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <img src="./img/logo.jpg" alt="Тишка">
+                    <div class="logo-text">Тишка</div>
+                </div>
+
+                <nav class="menu">
+                    <a href="index.html">На главную</a>
+                    
+                    <!-- Выпадающее меню для Категории -->
+                    <div class="has-dropdown">
+                       <a href="#">Категории ▼</a>
+                        <div class="dropdown">
+                            <a href="./obs/oneklass.html" class="dropdown-link">1 класс</a>
+                            <a href="./obs/twooklass.html" class="dropdown-link">2 класс</a>
+                            <a href="./obs/threeclass.html" class="dropdown-link">3 класс</a>
+                            <a href="./obs/fore.html" class="dropdown-link">4 класс</a>
+                        </div>
+                    </div>
+
+                    <a href="./obs/hiti.html">Хиты продаж</a>
+                    <a href="./obs/onas.html">О нас</a>
+                </nav>
+
+                <input class="search" type="text" placeholder="Поиск материалов...">
+
+                <div class="icons">
+                    <a href="https://vk.com/club239762843" class="hero-btn2">Связаться для покупки</a>  
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <!-- Левая картинка -->
+                
+
+                <!-- Центральный текст -->
+                <div class="hero-text">
+                    <h1>Качественные материалы</h1>
+                    <h2>для вдохновляющего обучения</h2>
+                    <p>Рабочие листы, дидактические материалы и конспекты уроков, созданные учителями для учителей.</p>
+                    <a href="obs/mahaz.html" class="hero-btn">Перейти в магазин →</a>
+                </div>
+
+                <!-- Правая картинка -->
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORIES -->
+<section class="categories">
+    <div class="container">
+        <div class="cards-wrapper">
+            <!-- Кнопки навигации (опционально) -->            
+            <div class="cards">
+                
+                <!-- Предмет 1 -->
+                <div class="card">
+                    <img src="./img/mat.png" alt="Математика">
+                    <div class="card-content">
+                        <h3>Математика</h3>
+                        <p>Учимся считать легко</p>
+                    </div>
+                </div>
+                <!-- Предмет 2 -->
+                <div class="card">
+                    <img src="img/rus.png" alt="Русский язык">
+                    <div class="card-content">
+                        <h3>Русский язык / Чтение</h3>
+                        <p>Развиваем навыки чтения и грамотности</p>
+                    </div>
+                </div>
+
+                <!-- Предмет 3 -->
+                <div class="card">
+                    <img src="img/okr.png" alt="Окружающий мир">
+                    <div class="card-content">
+                        <h3>Окружающий мир</h3>
+                        <p>Наглядное обучение</p>
+                    </div>
+                </div>
+
+                <!-- Новый предмет 4 -->
+                <div class="card">
+                    <img src="eng.jpg" alt="Информатика">
+                    <div class="card-content">
+                        <h3>Информатика</h3>
+                        <p>Основы логики и алгоритмов</p>
+                    </div>
+                </div>
+
+                <!-- Новый предмет 5 -->
+                <div class="card">
+                    <img src="eng.jpg" alt="Английский язык">
+                    <div class="card-content">
+                        <h3>Английский язык</h3>
+                        <p>Говорим свободно с первых уроков</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const wrapper = document.querySelector('.cards-wrapper');
+        const btnPrev = document.querySelector('.prev');
+        const btnNext = document.querySelector('.next');
+
+        if(btnPrev && btnNext) {
+            btnPrev.addEventListener('click', () => {
+                wrapper.scrollBy({ left: -200, behavior: 'smooth' });
+            });
+
+            btnNext.addEventListener('click', () => {
+                wrapper.scrollBy({ left: 200, behavior: 'smooth' });
+            });
+        }
+    });
+</script>
+
+    <!-- ADVANTAGES -->
+    <section class="advantages">
+        <div class="container">
+            <div class="advantages-grid">
+                
+                <div class="advantage">
+                    <div class="advantage-icon">
+                         <img src="img/serdeshko.png" alt="Иконка учителя">
+                    </div>
+                    <h4>Создано учителями</h4>
+                    <p>Материалы от педагогов для педагогов</p>
+                </div>
+
+                <div class="advantage">
+                    <div class="advantage-icon">
+                        <img src="img/shit.png" alt="Иконка щита">
+                    </div>
+                    <h4>Высокое качество</h4>
+                    <p>Проверенные материалы и методики</p>
+                </div>
+
+                <div class="advantage">
+                    <div class="advantage-icon">
+                        <img src="img/zvezd.png" alt="Иконка звезды">
+                    </div>
+                    <h4>Интересно и эффективно</h4>
+                    <p>Увлекаем учеников и развиваем навыки</p>
+                </div>
+
+                <div class="advantage">
+                    <div class="advantage-icon">
+                        <img src="img/strel.png" alt="Иконка стрелки вниз">
+                    </div>
+                    <h4>Мгновенное скачивание</h4>
+                    <p>Получайте материалы сразу после покупки</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            © 2026 Учебные материалы Тишка. Все права защищены.
+        </div>
+    </footer>
+
+    <!-- === НАЧАЛО КОДА КНОПКИ === -->
+
+<!-- 1. HTML -->
+<a href="#" class="back-to-top" id="backToTopBtn" title="Наверх">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="7 11 12 6 17 11"></polyline>
+        <line x1="12" y1="6" x2="12" y2="18"></line>
+    </svg>
+</a>
+
+<!-- 2. JS -->
+<script>
+    const backToTopBtn = document.getElementById('backToTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+
+    backToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+<!-- === КОНЕЦ КОДА КНОПКИ === -->
+</body>
+</html>

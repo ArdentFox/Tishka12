@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учебные материалы Тишка</title>
+    <!-- Подключаем шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- БАЗОВЫЕ СТИЛИ И СБРОС --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ body {
+            font-family: 'Nunito', sans-serif;
+    /* Путь к твоей картинке */
+    background-image: url('../img/fonost.jpg'); 
+    
+    /* Картинка не повторяется (чтобы не было плиток) */
+    background-repeat: no-repeat; 
+    
+    /* Картинка растягивается на весь экран, сохраняя пропорции */
+    background-size: cover; 
+    
+    /* Картинка фиксируется при прокрутке (опционально, красиво для параллакса) */
+    background-attachment: fixed; 
+    
+    /* Выравнивание картинки по центру */
+    background-position: center; 
+    
+    color: #1c2950;
+    
+        }
+
+.container {
+    max-width: 1400px;
+    margin: auto;
+    padding: 0 30px;
+}
+
+/* HEADER */
+header {
+    padding: 20px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: fixed; /* Было sticky, стало fixed — чтобы можно было двигать вверх/вниз */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+background: white; /* Важно: фон должен быть, иначе текст станет нечитаемым на фоне картинки */    
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Плавная анимация */
+}
+
+/* Класс для скрытия меню (сдвигаем его вверх за пределы экрана) */
+header.hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo img {
+    width: 70px;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.logo-text {
+    font-size: 36px;
+    font-weight: 800;
+    color: #ff8b32;
+    letter-spacing: -1px; /* Чуть плотнее шрифт для солидности */
+}
+
+/* --- УЛУЧШЕННОЕ МЕНЮ --- */
+.menu {
+    display: flex;
+    gap: 5px; /* Уменьшили gap здесь, так как теперь делаем отступы внутри ссылок */
+    position: relative;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #FD7777;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 15px 20px; /* ГЛАВНОЕ: добавили внутренние отступы, чтобы пункты не слипались */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    display: block;
+}
+
+.menu a:hover {
+    color: #ffffff;
+    background-color: #ff6f5b;
+    transform: scale(1.02); /* Легкое увеличение при наведении */
+    box-shadow: 0 4px 12px rgba(255, 111, 91, 0.3);
+}
+
+/* Выпадающее меню */
+.has-dropdown {
+    position: relative;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%; /* Центрируем относительно родителя */
+    transform: translateX(-50%) translateY(15px); /* Сдвиг вниз и центровка */
+    min-width: 240px;
+    background: white;
+    border-radius: 16px; /* Более мягкие углы */
+    border: 1px solid rgba(0,0,0,0.05); /* Тонкая граница для объема */
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12); /* Более глубокая тень */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /* Чтобы курсор не мешал анимации */
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Плавная анимация */
+    z-index: 1000;
+    padding: 10px 0;
+    margin-top: 10px;
+}
+
+/* Добавляем margin-top: -1px, чтобы убрать разрыв между кнопкой и меню */
+.has-dropdown:hover .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: all;
+    margin-top: -1px; 
+}
+
+/* ВАЖНО: Добавляем псевдоэлемент, который заполняет этот разрыв невидимой областью.
+   Это не даст меню закрыться, если курсор пройдет через "дырку" между кнопкой и списком */
+.has-dropdown::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 20px; /* Высота невидимой зоны, куда можно вести мышку */
+    z-index: 999;
+}
+
+.dropdown-link {
+    display: block;
+    padding: 14px 24px; /* Увеличенные отступы для комфорта */
+    color: #333;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+.dropdown-link:hover {
+    background: #fff5f5;
+    color: #ff6f5b;
+    padding-left: 30px; /* Эффект сдвига текста */
+    border-left: 4px solid #ff6f5b; /* Акцентная полоска */
+}
+
+/* Поиск и иконки */
+.search {
+    width: 280px;
+    padding: 12px 25px;
+    border: 1px solid #eee;
+    border-radius: 30px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search:focus {
+    border-color: #ff6f5b;
+    box-shadow: 0 0 0 3px rgba(255, 111, 91, 0.15);
+}
+
+.icons {
+    display: flex;
+    gap: 25px;
+    font-size: 24px;
+}
+
+.hero-btn2 {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #e65c4d;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 700;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.hero-btn2:hover {
+    background: #d04a3a;
+    transform: translateY(-2px);
+}
+.small-btn {
+    padding: 8px 16px;       /* Было 12px 30px — уменьшаем внутренние отступы */
+    font-size: 14px;         /* Было 24px (примерно) — уменьшаем текст */
+    border-radius: 20px;     /* Оставляем скругление, но можно сделать меньше, например 10px */
+}
+
+/* Опционально: если нужно, чтобы при наведении она не становилась слишком большой */
+.small-btn:hover {
+    transform: translateY(-1px); /* Было translateY(-2px) */
+}
+
+        /* --- HERO SECTION --- */
+        .hero {
+            padding: 60px 0 50px;
+        }
+
+       
+        .hero-content {
+    display: grid;
+    grid-template-columns: minmax(0, 800px) 500px minmax(0, 800px); /* Увеличили боковые колонки */
+    align-items: stretch;
+    gap: 0px;
+}
+        /* Контейнеры для картинок */
+        .hero-image, .hero-image2 {
+            width: 100%;
+            height: 80%;
+            overflow: hidden;
+            border-radius: 0px; /* Немного скруглили края для красоты */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .hero-image img, 
+        .hero-image2 img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Картинка заполняет блок, не искажаясь */
+            display: block;
+        }
+
+        /* Блок с текстом */
+        .hero-text {
+            text-align: center; 
+            /* ИЗМЕНЕНО: Центрируем контент внутри блока по вертикали и горизонтали */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 72px;
+            line-height: 1;
+            color: #13346e;
+            margin-bottom: 15px;
+        }
+
+        .hero-text h2 {
+            font-size: 48px;
+            color: #ff6f5b;
+            margin-bottom: 25px;
+        }
+
+        .hero-text p {
+            font-size: 22px;
+            color: #555;
+            margin-bottom: 35px;
+            max-width: 550px; 
+        }
+
+        .hero-btn {
+    display: inline-block;
+    padding: 18px 40px;
+    /* 1. Создаем градиент из 3 цветов. Можно менять цвета под себя */
+    background: linear-gradient(-45deg, #ff116e, #ff6b35, #ffc83b, #ff116e);
+    
+    /* 2. Важно: размер градиента делаем больше самой кнопки (250%), 
+       чтобы было место, куда ему "ехать" */
+    background-size: 250% 100%;
+    
+    color: white;
+    text-decoration: none;
+    border-radius: 15px;
+    font-weight: 800;
+    font-size: 22px;
+    
+    /* 3. Убираем transition для background, так как будем анимировать через @keyframes */
+    transition: transform 0.3s ease; 
+    box-shadow: 0 4px 15px rgba(255, 111, 91, 0.4); /* Добавим тень для объема */
+}
+
+/* 4. Анимация движения градиента */
+.hero-btn:hover {
+    /* Двигаем градиент по оси X */
+    background-position: 100% 0;
+    transform: scale(1.05); /* Чуть увеличиваем кнопку */
+}
+
+/* 5. Сам цикл анимации (бесконечное движение) */
+@keyframes gradient-flow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+/* Применяем анимацию к кнопке */
+.hero-btn {
+    animation: gradient-flow 3s ease infinite;
+}
+
+        /* --- CATEGORIES (CARDS) --- */
+       /* Базовые стили для контейнера */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    /* Обертка для скролла */
+    .cards-wrapper {
+        position: relative;
+        overflow-x: auto; /* Включает горизонтальную прокрутку */
+        white-space: nowrap; /* Предотвращает перенос строк */
+        padding: 20px 0;
+    }
+
+    /* Скрываем полосу прокрутки для красоты (работает в Chrome, Safari, Edge) */
+    .cards-wrapper::-webkit-scrollbar {
+        height: 8px;
+    }
+    .cards-wrapper::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
+    .cards-wrapper::-webkit-scrollbar-thumb {
+        background: #888; 
+        border-radius: 4px;
+    }
+
+    /* Контейнер для карточек */
+    .cards {
+        display: inline-flex; /* Выстраивает карточки в ряд */
+        gap: 20px; /* Расстояние между карточками */
+        min-width: 100%;
+    }
+
+    /* Карточка */
+    .card {
+       
+        border-radius: 12px;
+        width: 280px; /* Фиксированная ширина карточки */
+        flex-shrink: 0; /* Запрещает сжиматься карточкам */
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .card-content {
+        padding: 16px;
+    }
+
+    .card h3 {
+        margin: 0 0 8px 0;
+        font-size: 1.1rem;
+    }
+
+    .card p {
+        margin: 0;
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    /* Кнопки навигации */
+    .scroll-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(255, 255, 255, 0.8);
+        border: none;
+        cursor: pointer;
+        padding: 12px 16px;
+        border-radius: 50%;
+        font-size: 18px;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        transition: background 0.3s;
+    }
+
+    .scroll-btn:hover {
+        background-color: #fff;
+    }
+
+    .prev { left: 10px; }
+    .next { right: 10px; }
+
+    /* Адаптив: на мобильных убираем кнопки, оставляем свайп */
+    @media (max-width: 768px) {
+        .scroll-btn { display: none; }
+        .cards-wrapper { padding: 10px 0; }
+    }
+
+        /* --- ADVANTAGES --- */
+        .advantages {
+            margin: 70px 0;
+           
+            padding: 40px 0;
+        }
+
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .advantage {
+            text-align: center;
+        }
+
+        .advantage-icon {
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .advantage-icon img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+        }
+
+        .advantage h4 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .advantage p {
+            color: #666;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+          
+            padding: 40px 0;
+            margin-top: 50px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #ffffff;
+        }
+
+        /* --- АДАПТИВНОСТЬ --- */
+        @media (max-width: 1000px) {
+            .hero-content {
+                /* На планшетах делаем колонки поменьше, чтобы текст не терялся */
+                grid-template-columns: minmax(0, 25vw) 1fr minmax(0, 25vw);
+            }
+            
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .advantages-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .hero-text h1 { font-size: 50px; }
+            .hero-text h2 { font-size: 36px; }
+        }
+
+        @media (max-width: 768px) {
+            .menu { display: none; }
+            .search { display: none; }
+            
+            /* НА МОБИЛЬНЫХ: УБИРАЕМ СЕТКУ, ДЕЛАЕМ ВСЁ В ОДНУ КОЛОНКУ */
+            .hero-content {
+                grid-template-columns: 1fr !important;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .hero-image, .hero-image2 {
+                width: 100%;
+                max-width: 400px; /* Ограничиваем ширину на мобильном, чтобы не было слишком крупно */
+                margin: 0 auto;
+                height: auto; /* Высота подстраивается под ширину */
+            }
+            
+            .hero-image img, .hero-image2 img {
+                height: auto;
+            }
+
+            .advantages-grid { grid-template-columns: 1fr; }
+            
+            .hero-text h1 { font-size: 40px; }
+            .hero-text h2 { font-size: 28px; }
+            
+            .cards { grid-template-columns: 1fr; }
+
+            /* На мобильном скрываем стандартное выпадающее меню, 
+               можно реализовать бургер-меню отдельно */
+            .dropdown { display: none; }
+        }
+
+        /* --- СТИЛИ ДЛЯ СЕКЦИИ 1 КЛАССА --- */
+/* --- СТИЛИ ДЛЯ СЕКЦИИ 1 КЛАССА --- */
+.class-1-section {
+    padding: 40px 0;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px; /* Уменьшили расстояние между карточками (было 30 px) */
+    justify-items: center;
+    margin: 0 -15px; /* Отрицательный отступ для приближения колонок к краям (опционально) */
+}
+
+.card {
+    
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 450px; /* Увеличили максимальную ширину карточки */
+    height: 500px; /* Фиксированная высота карточки для вытянутости */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Контейнер с изображением и кнопками */
+.image-container {
+    position: relative;
+    height: 350px; /* Увеличили высоту для вытянутости (было 200 px) */
+    overflow: hidden;
+}
+
+.carousel {
+    display: flex;
+    transition: transform 0.3s ease;
+    width: 100%;
+}
+
+.carousel-item {
+    min-width: 100%; /* Каждый слайд занимает всю ширину */
+}
+
+.carousel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Кнопки навигации */
+.prev-btn,
+.next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    font-size: 18px;
+    z-index: 10;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.prev-btn { left: 10px; }
+.next-btn { right: 10px; }
+
+.prev-btn:hover,
+.next-btn:hover {
+    background-color: white;
+}
+
+/* Блок с описанием */
+.description {
+    padding: 16px;
+}
+
+.desc-title {
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+    color: #1c2950;
+}
+
+.desc-text {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+.back-btn-wrapper {
+    text-align: center;           /* центрирование для inline-элементов */
+    margin: 40px 0;                /* отступ сверху/снизу, чтобы не прилипала */
+}
+
+.back-btn {
+    display: inline-block;         /* оставляем как было */
+    padding: 18px 40px;
+    background: linear-gradient(-45deg, #ff116e, #ff6b35, #ffc83b, #ff116e);
+    background-size: 250% 100%;
+    color: white;
+    text-decoration: none;
+    border-radius: 15px;
+    font-weight: 800;
+    font-size: 22px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 111, 91, 0.4);
+    animation: gradient-flow 3s ease infinite;
+}
+
+.back-btn:hover {
+    background-position: 100% 0;
+    transform: scale(1.05);
+}
+
+@keyframes gradient-flow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+/* Адаптивность: на мобильных — 1 колонка */
+@media (max-width: 768px) {
+    .cards-grid {
+        grid-template-columns: 1fr; /* 1 колонка на мобильных */
+        gap: 20px;
+    }
+    .card {
+        max-width: 100%;
+    }
+}
+    </style>
+
+
+
+
+
+
+</head>
+<body>
+
+       <!-- HEADER -->
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <img src="../img/logo.jpg" alt="Тишка">
+                    <div class="logo-text">Тишка</div>
+                </div>
+
+                <nav class="menu">
+                    <a href="../index.html">На главную</a>
+                    
+                    <!-- Выпадающее меню для Категории -->
+                    <div class="has-dropdown">
+                        <a href="#">Категории ▼</a>
+                        <div class="dropdown">
+                            <a href="../obs/oneklass.html" class="dropdown-link">1 класс</a>
+                            <a href="../obs/twooklass.html" class="dropdown-link">2 класс</a>
+                            <a href="../obs/threeclass.html" class="dropdown-link">3 класс</a>
+                            <a href="../obs/fore.html" class="dropdown-link">4 класс</a>
+                        </div>
+                    </div>
+
+                    <a href="../obs/hiti.html">Хиты продаж</a>
+                    <a href="../obs/onas.html">О нас</a>
+                </nav>
+
+               
+
+                <div class="icons">
+                    <a href="https://vk.com/club239762843" class="hero-btn2 small-btn">Связаться для покупки</a>   
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero-text">
+<h1>Русский язык</h1>
+</div>
+
+
+<!-- КОНТЕЙНЕР С 4 КАРТОЧКАМИ (2×2) -->
+<section class="class-1-section">
+    <div class="container">
+        <div class="cards-grid">
+            <!-- КАРТОЧКА 1 -->
+            <div class="card">
+                <div class="image-container">
+                    <button class="prev-btn" onclick="prevSlide(this)">‹</button>
+                    <div class="carousel" id="carousel1">
+                <div class="carousel-item">
+                    <img src="../img/kart1.jpg" alt="Урок 1 картинка 1">
+        </div>
+        <div class="carousel-item">
+            <img src="../img/kart3.jpg" alt="Урок 1 картинка 2">
+        </div>
+        <div class="carousel-item">
+            <img src="../img/lesson1_3.jpg" alt="Урок 1 картинка 3">
+        </div>
+    </div>
+    <button class="next-btn" onclick="nextSlide(this)">›</button>
+</div>
+<div class="description">
+    <div class="desc-title">Основы счёта</div>
+    <div class="desc-text">Урок для начинающих: учимся считать от 1 до 10 с помощью весёлых картинок и игр. Включает задания на распознавание чисел и простые примеры.</div>
+</div>
+</div>
+
+<!-- КАРТОЧКА 2 -->
+<div class="card">
+    <div class="image-container">
+        <button class="prev-btn" onclick="prevSlide(this)">‹</button>
+        <div class="carousel" id="carousel2">
+            <div class="carousel-item">
+                <img src="../img/lesson2_1.jpg" alt="Урок 2 картинка 1">
+            </div>
+            <div class="carousel-item">
+                <img src="../img/lesson2_2.jpg" alt="Урок 2 картинка 2">
+            </div>
+        </div>
+        <button class="next-btn" onclick="nextSlide(this)">›</button>
+    </div>
+    <div class="description">
+        <div class="desc-title">Буквы и звуки</div>
+        <div class="desc-text">Знакомство с буквами русского алфавита: учим звуки, учимся читать слоги и простые слова.</div>
+    </div>
+</div>
+
+<!-- КАРТОЧКА 3 -->
+<div class="card">
+    <div class="image-container">
+        <button class="prev-btn" onclick="prevSlide(this)">‹</button>
+        <div class="carousel" id="carousel3">
+            <div class="carousel-item">
+                <img src="../img/lesson3_1.jpg" alt="Урок 3 картинка 1">
+            </div>
+            <div class="carousel-item">
+                <img src="../img/lesson3_2.jpg" alt="Урок 3 картинка 2">
+            </div>
+        </div>
+        <button class="next-btn" onclick="nextSlide(this)">›</button>
+    </div>
+    <div class="description">
+        <div class="desc-title">Простые задачи</div>
+        <div class="desc-text">Решение простых арифметических задач: сложение и вычитание в пределах 10.</div>
+    </div>
+</div>
+
+<!-- КАРТОЧКА 4 -->
+<div class="card">
+    <div class="image-container">
+        <button class="prev-btn" onclick="prevSlide(this)">‹</button>
+        <div class="carousel" id="carousel4">
+            <div class="carousel-item">
+                <img src="../img/lesson4_1.jpg" alt="Урок 4 картинка 1">
+            </div>
+            <div class="carousel-item">
+                <img src="../img/lesson4_2.jpg" alt="Урок 4 картинка 2">
+            </div>
+        </div>
+        <button class="next-btn" onclick="nextSlide(this)">›</button>
+    </div>
+    <div class="description">
+        <div class="desc-title">Окружающий мир</div>
+        <div class="desc-text">Изучение природы и окружающего мира: растения, животные, времена года.</div>
+    </div>
+</div>
+</div> <!-- .cards-grid -->
+</div> <!-- .container -->
+
+</section>
+<div class="back-btn-wrapper">
+    <a href="../obs/oneklass.html" class="back-btn">Вернуться назад ←</a>
+</div>
+    
+<!-- ADVANTAGES -->
+     
+    <section class="advantages">
+        <div class="container">
+            <div class="advantages-grid">
+                
+                <div class="advantage">
+                    <div class="advantage-icon">
+                         <img src="../img/serdeshko.png" alt="Иконка учителя">
+                    </div>
+                    <h4>Создано учителями</h4>
+                    <p>Материалы от педагогов для педагогов</p>
+                </div>
+
+                <div class="advantage">
+                    <div class="advantage-icon">
+                        <img src="../img/shit.png" alt="Иконка щита">
+                    </div>
+                    <h4>Высокое качество</h4>
+                    <p>Проверенные материалы и методики</p>
+                </div>
+
+                <div class="advantage">
+                    <div class="advantage-icon">
+                        <img src="../img/zvezd.png" alt="Иконка звезды">
+                    </div>
+                    <h4>Интересно и эффективно</h4>
+                    <p>Увлекаем учеников и развиваем навыки</p>
+                </div>
+
+                <div class="advantage">
+                    <div class="advantage-icon">
+                        <img src="../img/strel.png" alt="Иконка стрелки вниз">
+                    </div>
+                    <h4>Мгновенное скачивание</h4>
+                    <p>Получайте материалы сразу после покупки</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+<script>
+function prevSlide(button) {
+    const carousel = button.closest('.card').querySelector('.carousel');
+    const items = carousel.querySelectorAll('.carousel-item');
+
+    // Получаем текущий индекс слайда
+    const currentTransform = carousel.style.transform;
+    let currentIndex = 0;
+
+    if (currentTransform) {
+        const match = currentTransform.match(/translateX\(-?(\d+)%\)/);
+        if (match) {
+            currentIndex = parseInt(match[1]) / 100;
+        }
+    }
+
+    // Вычисляем новый индекс (предыдущий, или последний, если текущий — первый)
+    const newIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+
+    // Применяем трансформацию для переключения слайда (сдвиг влево)
+    carousel.style.transform = `translateX(-${newIndex * 100}%)`;
+}
+
+function nextSlide(button) {
+    const carousel = button.closest('.card').querySelector('.carousel');
+    const items = carousel.querySelectorAll('.carousel-item');
+
+    // Получаем текущий индекс слайда
+    const currentTransform = carousel.style.transform;
+    let currentIndex = 0;
+
+    if (currentTransform) {
+        const match = currentTransform.match(/translateX\(-?(\d+)%\)/);
+        if (match) {
+            currentIndex = parseInt(match[1]) / 100;
+        }
+    }
+
+    // Вычисляем новый индекс (следующий, или первый, если текущий — последний)
+    const newIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+
+    // Применяем трансформацию для переключения слайда (сдвиг вправо)
+    carousel.style.transform = `translateX(-${newIndex * 100}%)`;
+}
+
+// Инициализация каруселей при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    // Устанавливаем первый слайд видимым для всех каруселей
+    document.querySelectorAll('.carousel').forEach(carousel => {
+        carousel.style.transform = 'translateX(0)';
+    });
+});
+
+// Дополнительная функция для автоматической инициализации — на случай, если элементы добавляются динамически
+function initCarousels() {
+    document.querySelectorAll('.carousel').forEach(carousel => {
+        // Убедимся, что первый слайд отображается
+        if (!carousel.style.transform) {
+            carousel.style.transform = 'translateX(0)';
+        }
+    });
+}
+
+// Вызываем инициализацию сразу после загрузки DOM
+document.addEventListener('DOMContentLoaded', initCarousels);
+
+// Перезапускаем инициализацию после изменения размера окна (на случай адаптивности)
+window.addEventListener('resize', initCarousels);
+</script>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            © 2026 Учебные материалы Тишка. Все права защищены.
+        </div>
+    </footer>
+<script>
+    const header = document.querySelector('header');
+    let lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+        // Если прокручиваем вниз (текущая позиция больше предыдущей)
+        if (window.scrollY > lastScrollY && window.scrollY > 50) {
+            // Скрываем меню (добавляем класс hidden)
+            header.classList.add('hidden');
+        } else {
+            // Если крутим вверх ИЛИ мы в самом верху страницы
+            header.classList.remove('hidden');
+        }
+        
+        lastScrollY = window.scrollY;
+    });
+</script>
+</body>
+</html>
